@@ -28,7 +28,7 @@ import (
 )
 
 var (
-	testfiles = []string{"testdata/base64.tmx", "testdata/base64-zlib.tmx", "testdata/csv.tmx", "testdata/xml.tmx"}
+	testFiles   = []string{"testdata/base64.tmx", "testdata/base64-zlib.tmx", "testdata/csv.tmx", "testdata/xml.tmx"}
 
 	layer0Data = []GID{
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8,
@@ -88,7 +88,7 @@ func TestRead(t *testing.T) {
 
 	}
 
-	for _, name := range testfiles {
+	for _, name := range testFiles {
 		t.Log("Reading", name)
 
 		r, err := os.Open(name)

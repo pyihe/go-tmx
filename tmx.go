@@ -69,12 +69,12 @@ type Map struct {
 	TileWidth    int           `xml:"tilewidth,attr"`
 	TileHeight   int           `xml:"tileheight,attr"`
 	Properties   []Property    `xml:"properties>property"`
-	Tilesets     []Tileset     `xml:"tileset"`
+	TileSets     []TileSet     `xml:"tileset"`
 	Layers       []Layer       `xml:"layer"`
 	ObjectGroups []ObjectGroup `xml:"objectgroup"`
 }
 
-type Tileset struct {
+type TileSet struct {
 	FirstGID   GID        `xml:"firstgid,attr"`
 	Source     string     `xml:"source,attr"`
 	Name       string     `xml:"name,attr"`
@@ -108,7 +108,7 @@ type Layer struct {
 	Properties   []Property     `xml:"properties>property"`
 	Data         Data           `xml:"data"`
 	DecodedTiles []*DecodedTile // This is the attiribute you'd like to use, not Data. Tile entry at (x,y) is obtained using l.DecodedTiles[y*map.Width+x].
-	Tileset      *Tileset       // This is only set when the layer uses a single tileset and NilLayer is false.
+	Tileset      *TileSet       // This is only set when the layer uses a single tileset and NilLayer is false.
 	Empty        bool           // Set when all entries of the layer are NilTile
 }
 
@@ -330,7 +330,7 @@ func decodePoints(s string) (points []Point, err error) {
 	return
 }
 
-func getTileset(m *Map, l *Layer) (tileset *Tileset, isEmpty, usesMultipleTilesets bool) {
+func getTileset(m *Map, l *Layer) (tileset *TileSet, isEmpty, usesMultipleTilesets bool) {
 	for i := 0; i < len(l.DecodedTiles); i++ {
 		tile := l.DecodedTiles[i]
 		if !tile.Nil {
@@ -399,11 +399,11 @@ func (m *Map) DecodeGID(gid GID) (*DecodedTile, error) {
 
 	gidBare := gid &^ GIDFlip
 
-	for i := len(m.Tilesets) - 1; i >= 0; i-- {
-		if m.Tilesets[i].FirstGID <= gidBare {
+	for i := len(m.TileSets) - 1; i >= 0; i-- {
+		if m.TileSets[i].FirstGID <= gidBare {
 			return &DecodedTile{
-				ID:             ID(gidBare - m.Tilesets[i].FirstGID),
-				Tileset:        &m.Tilesets[i],
+				ID:             ID(gidBare - m.TileSets[i].FirstGID),
+				Tileset:        &m.TileSets[i],
 				HorizontalFlip: gid&GIDHorizontalFlip != 0,
 				VerticalFlip:   gid&GIDVerticalFlip != 0,
 				DiagonalFlip:   gid&GIDDiagonalFlip != 0,
@@ -417,7 +417,7 @@ func (m *Map) DecodeGID(gid GID) (*DecodedTile, error) {
 
 type DecodedTile struct {
 	ID             ID
-	Tileset        *Tileset
+	Tileset        *TileSet
 	HorizontalFlip bool
 	VerticalFlip   bool
 	DiagonalFlip   bool
