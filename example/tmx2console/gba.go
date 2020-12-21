@@ -24,7 +24,7 @@ package main
 
 import (
 	"encoding/binary"
-	"github.com/salviati/go-tmx/tmx"
+	tmx "github.com/pyihe/go-tmx"
 	"strconv"
 )
 
